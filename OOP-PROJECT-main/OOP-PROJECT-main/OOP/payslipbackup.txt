@@ -1,0 +1,287 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+# ── Data ────────────────────────────────────────────────────────
+PAY_RATES = {
+    "Manager":              {"A": 25000, "B": 28000, "tax": 20},
+    "System Administrator": {"A": 20000, "B": 23000, "tax": 15},
+    "System Analyst":       {"A": 15000, "B": 17000, "tax": 12},
+    "Programmer":           {"A": 10000, "B": 12000, "tax": 10},
+    "Technician":           {"A": 8000,  "B": 9000,  "tax": 7},
+    "Encoder":              {"A": 6000,  "B": 6600,  "tax": 5},
+    "Messenger":            {"A": 5000,  "B": 5500,  "tax": 4},
+}
+SSS_FIXED = 200
+
+# ── Colors ──────────────────────────────────────────────────────
+TEAL   = "#008B8B"
+WHITE  = "#ffffff"
+BLACK  = "#000000"
+RED    = "#cc0000"
+GRAY   = "#d4d0c8"
+
+# ════════════════════════════════════════════════════════════════
+# MAIN WINDOW
+# ════════════════════════════════════════════════════════════════
+root = tk.Tk()
+root.title("Payslip")
+root.configure(bg=TEAL)
+root.resizable(False, False)
+
+computed = {}
+
+# ── Title ───────────────────────────────────────────────────────
+tk.Label(root, text="PAYSLIP", bg=TEAL, fg=WHITE,
+         font=("Arial", 18, "bold")).grid(
+    row=0, column=0, columnspan=4, pady=(12, 8), padx=20)
+
+# ── Label style ─────────────────────────────────────────────────
+def lbl(parent, text, row, col, w=10):
+    tk.Label(parent, text=text, bg=TEAL, fg=WHITE,
+             font=("Arial", 11), anchor="w", width=w).grid(
+        row=row, column=col, sticky="w", padx=(0, 4), pady=5)
+
+def entry(parent, var, row, col, w=18, readonly=False, color=BLACK):
+    e = tk.Entry(parent, textvariable=var, width=w,
+                 font=("Arial", 11), bg=WHITE, fg=color,
+                 relief="sunken", bd=2,
+                 readonlybackground=WHITE,
+                 disabledbackground=WHITE,
+                 disabledforeground=color)
+    if readonly:
+        e.config(state="disabled")
+    e.grid(row=row, column=col, sticky="w", pady=5)
+    return e
+
+# ── Left frame ──────────────────────────────────────────────────
+left = tk.Frame(root, bg=TEAL)
+left.grid(row=1, column=0, columnspan=2, padx=(20, 10), sticky="nw")
+
+# Name
+tk.Label(left, text="Name", bg=TEAL, fg=WHITE,
+         font=("Arial", 11), anchor="w", width=10).grid(
+    row=0, column=0, sticky="w", pady=5)
+name_var = tk.StringVar()
+name_entry = tk.Entry(left, textvariable=name_var, width=20,
+                      font=("Arial", 11), bg=WHITE, fg=BLACK,
+                      relief="sunken", bd=2)
+name_entry.grid(row=0, column=1, sticky="w", pady=5)
+
+# Position
+tk.Label(left, text="Position", bg=TEAL, fg=WHITE,
+         font=("Arial", 11), anchor="w", width=10).grid(
+    row=1, column=0, sticky="w", pady=5)
+pos_var = tk.StringVar(value="(Please select)")
+
+style = ttk.Style()
+style.theme_use("clam")
+style.configure("P.TCombobox",
+                fieldbackground=WHITE, background=GRAY,
+                foreground=BLACK, arrowcolor=BLACK,
+                font=("Arial", 11))
+style.map("P.TCombobox",
+          fieldbackground=[("readonly", WHITE)],
+          foreground=[("readonly", BLACK)],
+          background=[("readonly", GRAY)])
+
+pos_cb = ttk.Combobox(left, textvariable=pos_var,
+                      values=list(PAY_RATES.keys()),
+                      state="readonly", width=19,
+                      style="P.TCombobox",
+                      font=("Arial", 11))
+pos_cb.grid(row=1, column=1, sticky="w", pady=5)
+
+# OT Hours
+tk.Label(left, text="OT Hours", bg=TEAL, fg=WHITE,
+         font=("Arial", 11), anchor="w", width=10).grid(
+    row=2, column=0, sticky="w", pady=5)
+ot_var = tk.StringVar(value="0")
+ot_entry = tk.Entry(left, textvariable=ot_var, width=10,
+                    font=("Arial", 11), bg=WHITE, fg=BLACK,
+                    relief="sunken", bd=2)
+ot_entry.grid(row=2, column=1, sticky="w", pady=5)
+
+# Pay Grade
+grade_var = tk.StringVar(value="A")
+pg = tk.LabelFrame(left, text="Pay Grade", bg=TEAL, fg=WHITE,
+                   font=("Arial", 10), bd=1, relief="groove")
+pg.grid(row=3, column=0, columnspan=2, sticky="ew", pady=(8, 4), ipady=5)
+
+# Make pay grade stretch full width with A B centered
+pg.columnconfigure(0, weight=1)
+pg.columnconfigure(1, weight=1)
+
+radio_a = tk.Radiobutton(pg, text=" A", value="A", variable=grade_var,
+                          bg=TEAL, fg=WHITE, font=("Arial", 11),
+                          activebackground=TEAL, activeforeground=WHITE,
+                          selectcolor=TEAL)
+radio_a.grid(row=0, column=0, sticky="e", padx=(10, 15), pady=3)
+
+radio_b = tk.Radiobutton(pg, text=" B", value="B", variable=grade_var,
+                          bg=TEAL, fg=WHITE, font=("Arial", 11),
+                          activebackground=TEAL, activeforeground=WHITE,
+                          selectcolor=TEAL)
+radio_b.grid(row=0, column=1, sticky="w", padx=(15, 10), pady=3)
+
+# ── Right frame ─────────────────────────────────────────────────
+right = tk.Frame(root, bg=TEAL)
+right.grid(row=1, column=2, columnspan=2, padx=(10, 20), sticky="nw")
+
+def rlbl(text, row):
+    tk.Label(right, text=text, bg=TEAL, fg=WHITE,
+             font=("Arial", 11), anchor="e", width=13).grid(
+        row=row, column=0, sticky="e", pady=5)
+
+def rout(var, row, color=BLACK):
+    e = tk.Entry(right, textvariable=var, width=12,
+                 font=("Arial", 11), bg=WHITE, fg=color,
+                 relief="sunken", bd=2,
+                 state="disabled",
+                 disabledbackground=WHITE,
+                 disabledforeground=color)
+    e.grid(row=row, column=1, sticky="w", pady=5, padx=(4, 0))
+    return e
+
+gross_var = tk.StringVar()
+tax_var   = tk.StringVar()
+sss_var   = tk.StringVar(value="200")
+net_var   = tk.StringVar()
+
+rlbl("Gross Salary:", 0); rout(gross_var, 0)
+tk.Label(right, text="Less:", bg=TEAL, fg=WHITE,
+         font=("Arial", 11), anchor="e", width=13).grid(
+    row=1, column=0, sticky="e", pady=2)
+rlbl("Tax:",         2); rout(tax_var,   2, RED)
+rlbl("SSS:",         3); rout(sss_var,   3, RED)
+rlbl("Net Salary:",  4); rout(net_var,   4)
+
+# ── Buttons ─────────────────────────────────────────────────────
+btn_frame = tk.Frame(root, bg=TEAL)
+btn_frame.grid(row=2, column=0, columnspan=4, pady=(10, 14))
+
+btn_cfg = dict(bg=GRAY, fg=BLACK, font=("Arial", 11),
+               relief="raised", bd=2, width=9,
+               activebackground="#bbb8b0", cursor="hand2")
+
+# ── Logic ────────────────────────────────────────────────────────
+def compute():
+    global computed
+
+    # Validate name
+    name_val = name_var.get().strip()
+    if not name_val:
+        name_entry.config(bg="#fff0f0")
+        messagebox.showwarning("Input Error", "Please enter a Name.")
+        return
+    name_entry.config(bg=WHITE)
+
+    # Validate position
+    pos = pos_var.get()
+    if pos not in PAY_RATES:
+        messagebox.showwarning("Input Error", "Please select a Position.")
+        return
+
+    # Validate OT hours
+    ot_raw = ot_var.get().strip()
+    try:
+        ot_hours = float(ot_raw)
+        if ot_hours < 0:
+            raise ValueError
+        ot_entry.config(bg=WHITE)
+    except ValueError:
+        ot_entry.config(bg="#fff0f0")
+        if ot_raw == "" or not ot_raw.replace(".", "").isdigit():
+            messagebox.showwarning("Input Error",
+                "OT Hours must be a valid number (e.g. 0, 5, 5.5).")
+        else:
+            messagebox.showwarning("Input Error",
+                "OT Hours cannot be negative.")
+        return
+
+    # Calculate
+    grade     = grade_var.get()
+    basic     = PAY_RATES[pos][grade]
+    ot_pay    = ot_hours * 0.01 * basic
+    gross     = basic + ot_pay
+    wh_tax    = round(gross * PAY_RATES[pos]["tax"] / 100)
+    total_ded = SSS_FIXED + wh_tax
+    net       = round((gross - total_ded) * 100) / 100
+
+    gross_var.set(f"{gross:,.2f}")
+    tax_var.set(f"{wh_tax:,.2f}")
+    sss_var.set(f"{SSS_FIXED:,.2f}")
+    net_var.set(f"{net:,.2f}")
+
+    computed = {
+        "name": name_val.upper(), "position": pos, "grade": grade,
+        "ot_hours": ot_hours, "ot_pay": ot_pay, "basic": basic,
+        "gross": gross, "wh_tax": wh_tax,
+        "total_ded": total_ded, "net": net,
+    }
+
+def clear():
+    global computed
+    name_var.set("")
+    pos_var.set("(Please select)")
+    ot_var.set("0")
+    grade_var.set("A")
+    gross_var.set("")
+    tax_var.set("")
+    sss_var.set("200")
+    net_var.set("")
+    name_entry.config(bg=WHITE)
+    ot_entry.config(bg=WHITE)
+    computed = {}
+
+def print_slip():
+    if not computed or not computed.get("name"):
+        messagebox.showwarning("No Data", "Please compute first.")
+        return
+
+    win = tk.Toplevel(root)
+    win.title("Employee Payslip")
+    win.configure(bg=WHITE)
+    win.resizable(False, False)
+
+    f = tk.Frame(win, bg=WHITE, padx=30, pady=20)
+    f.pack()
+
+    rows = [
+        ("Employee Name:",    computed["name"],                     BLACK),
+        ("Position:",         computed["position"],                 BLACK),
+        ("Pay Grade Type:",   computed["grade"],                    BLACK),
+        ("OT Hours:",         str(computed["ot_hours"]),            BLACK),
+        ("OT Amount:",        f"{computed['ot_pay']:,.2f}",         BLACK),
+        ("Basic Salary:",     f"{computed['basic']:,}",             BLACK),
+        ("SSS Contribution:", f"{SSS_FIXED:,}",                     RED),
+        ("Withholding Tax:",  f"{computed['wh_tax']:,.2f}",         RED),
+        ("Total Deductions:", f"{computed['total_ded']:,.2f}",      RED),
+        ("Net Income:",       f"{computed['net']:,.2f}",            BLACK),
+    ]
+
+    tk.Frame(f, bg="#cccccc", height=1).grid(
+        row=0, column=0, columnspan=2, sticky="ew", pady=(0, 8))
+
+    for i, (label, value, color) in enumerate(rows):
+        tk.Label(f, text=label, bg=WHITE, fg=BLACK,
+                 font=("Arial", 11, "bold"), anchor="w", width=20).grid(
+            row=i+1, column=0, sticky="w", pady=3)
+        tk.Label(f, text=value, bg=WHITE, fg=color,
+                 font=("Arial", 11), anchor="e", width=14).grid(
+            row=i+1, column=1, sticky="e", pady=3)
+
+    tk.Frame(f, bg="#cccccc", height=1).grid(
+        row=len(rows)+1, column=0, columnspan=2,
+        sticky="ew", pady=(8, 0))
+
+    tk.Button(f, text="Back", command=win.destroy,
+              bg=GRAY, fg=BLACK, font=("Arial", 11),
+              relief="raised", bd=2, width=9,
+              activebackground="#bbb8b0", cursor="hand2").grid(
+        row=len(rows)+2, column=0, columnspan=2, pady=(14, 0))
+
+tk.Button(btn_frame, text="Compute", command=compute, **btn_cfg).pack(side="left", padx=10)
+tk.Button(btn_frame, text="Clear",   command=clear,   **btn_cfg).pack(side="left", padx=10)
+tk.Button(btn_frame, text="Print",   command=print_slip, **btn_cfg).pack(side="left", padx=10)
+
+root.mainloop()
