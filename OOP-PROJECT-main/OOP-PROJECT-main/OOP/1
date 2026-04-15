@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
 
-
 def submit():
     errors = []
     try:
@@ -17,7 +16,6 @@ def submit():
             errors.append("Please enter a valid address.")
         if errors:
             raise ValueError("\n".join(errors))
-
         info = {
             "Name":    name.get(),
             "Address": address.get(),
@@ -25,18 +23,16 @@ def submit():
             "Email":   email.get(),
         }
         for widget in root.winfo_children():
-    		if isinstance(widget, Toplevel) and getattr(widget, "_is_print_frame", False):
-        		widget.destroy()
+            if isinstance(widget, Toplevel) and getattr(widget, "_is_print_frame", False):
+                widget.destroy()
         window = Toplevel(root)
-        window._is_print_frame=True
+        window._is_print_frame = True
         window.title("Summary")
         window.geometry("250x130")
         for key, value in info.items():
             Label(window, text=f"{key}: {value}", font=("Arial", 10)).pack()
-
     except ValueError as e:
         messagebox.showerror("ERROR", str(e))
-
 
 def clear():
     name.delete(0, END)
@@ -44,28 +40,31 @@ def clear():
     contact.delete(0, END)
     email.delete(0, END)
 
-
 root = Tk()
-root.geometry("270x250")
 root.title("User Information")
+root.resizable(False, False)
 
-Label(root, text="Name:",           font=("Arial", 10)).place(x=30,  y=10)
+# Padding around the grid
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+
+Label(root, text="Name:",           font=("Arial", 10)).grid(row=0, column=0, sticky="w",  padx=(30, 10), pady=(20, 8))
 name = Entry(root, width=15)
-name.place(x=140, y=10)
+name.grid(                                                row=0, column=1, sticky="w",  padx=(0,  30), pady=(20, 8))
 
-Label(root, text="Address:",        font=("Arial", 10)).place(x=30,  y=50)
+Label(root, text="Address:",        font=("Arial", 10)).grid(row=1, column=0, sticky="w",  padx=(30, 10), pady=8)
 address = Entry(root, width=15)
-address.place(x=140, y=50)
+address.grid(                                             row=1, column=1, sticky="w",  padx=(0,  30), pady=8)
 
-Label(root, text="Contact Number:", font=("Arial", 10)).place(x=30,  y=100)
+Label(root, text="Contact Number:", font=("Arial", 10)).grid(row=2, column=0, sticky="w",  padx=(30, 10), pady=8)
 contact = Entry(root, width=15)
-contact.place(x=140, y=100)
+contact.grid(                                             row=2, column=1, sticky="w",  padx=(0,  30), pady=8)
 
-Label(root, text="Email:",          font=("Arial", 10)).place(x=30,  y=150)
+Label(root, text="Email:",          font=("Arial", 10)).grid(row=3, column=0, sticky="w",  padx=(30, 10), pady=8)
 email = Entry(root, width=15)
-email.place(x=140, y=150)
+email.grid(                                               row=3, column=1, sticky="w",  padx=(0,  30), pady=8)
 
-Button(root, text="Submit", command=submit).place(x=30,  y=200)
-Button(root, text="Clear",  command=clear).place(x=150, y=200)
+Button(root, text="Submit", command=submit).grid(row=4, column=0, pady=(16, 20))
+Button(root, text="Clear",  command=clear).grid( row=4, column=1, pady=(16, 20))
 
 root.mainloop()
