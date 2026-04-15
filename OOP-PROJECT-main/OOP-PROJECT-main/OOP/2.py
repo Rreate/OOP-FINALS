@@ -4,15 +4,17 @@ from PIL import Image, ImageTk
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-try:
-        if order_entry.get().isdigit():
+def compute_total():
+    try:
+        if order_entry.get():
+            error=[]
             order_total = float(order_entry.get())
             shipping_fee = shipping_var.get()
 
             if order_total < 0:
-                raise ValueError("Order amount cannot be negative.")
+                error.append("Order amount cannot be negative.")
             if shipping_fee == 0.0:
-                raise ValueError("Please select a shipping option.")
+                error.append("Please select a shipping option.")
             elif shipping_fee == 5.95 and order_total >= 75:
                 shipping_fee = 0.0
 
@@ -20,10 +22,10 @@ try:
 
             result_entry.delete(0, END)
             result_entry.insert(0, f"{total:.2f}")
-        elif not order_entry.get().strip():
-            raise ValueError("Order amount cannot have empty.")
+            if errors:
+                raise ValueError("\n".join(errors))
         else:
-            raise ValueError("Order amount cannot have letter.")
+            raise ValueError("Order amount cannot have empty.")
     except ValueError as e:
         messagebox.showerror("Error", str(e))
 
