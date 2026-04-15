@@ -52,6 +52,8 @@ root.columnconfigure(1, weight=1)
 root.columnconfigure(2, minsize=120)        
 
 
+# --- Images placement ---
+
 bg_label = Label(root, image=img_bg)
 bg_label.grid(row=0, column=0, columnspan=3, rowspan=10, sticky="nsew")
 bg_label.lower()
@@ -63,6 +65,7 @@ Label(logo_frame, image=img_cert, bg="#f0f0e6").grid(row=0, column=1)
 
 Label(root, image=img_py, bg="#f0f0e6").grid(row=0, column=2, sticky="ne", padx=10, pady=17)
 
+# ---Main Frame ---
 panel = Frame(root, bg="#f0f0e6", bd=1, relief="solid", padx=20, pady=14)
 panel.grid(row=0, column=1, sticky="n", pady=50)
 
@@ -70,7 +73,7 @@ panel.grid(row=0, column=1, sticky="n", pady=50)
 panel.columnconfigure(0, weight=1)
 panel.columnconfigure(1, weight=1)
 
-
+# --- Title & Input ---
 Label(panel, text="CandleLine Corporation", bg="#f0f0e6",
       font=("Times New Roman", 20, "underline", "bold")
       ).grid(row=0, column=0, columnspan=2, pady=(0, 10))
@@ -85,9 +88,11 @@ order_entry = Entry(panel, width=20, font=("Times New Roman", 10))
 order_entry.grid(row=2, column=0, columnspan=2, pady=(2, 10))
 
 
+# --- Lines ---
 Frame(panel, width=500, height=1, bg="black").grid(
     row=3, column=0, columnspan=2, sticky="ew", pady=(0, 6))
 
+# --- Shipping ---
 
 shipping_var = DoubleVar(value=0.0)
 Label(panel, text="Shipping method", bg="#f0f0e6",
@@ -115,6 +120,7 @@ Radiobutton(panel, bg="#f0f0e6",
             font=("Times New Roman", 10), anchor="w"
             ).grid(row=6, column=0, sticky="w", padx=10, pady=(0, 6))
 
+# --- Lines ---
 Frame(panel, width=500, height=1, bg="black").grid(
     row=7, column=0, columnspan=2, sticky="ew", pady=6)
 
@@ -122,9 +128,11 @@ Label(panel, text="Amounts Payable (12% VAT included):",
       bg="#f0f0e6", font=("Times New Roman", 10)
       ).grid(row=8, column=0, sticky="e", padx=(0, 6), pady=6)
 
+# --- Result ---
 result_entry = Entry(panel, width=20, font=("Times New Roman", 10), bg="#DBDBD0")
 result_entry.grid(row=8, column=1, sticky="w", pady=6)
 
+# --- Buttons ---
 btn_frame = Frame(panel, bg="#f0f0e6")
 btn_frame.grid(row=9, column=0, columnspan=2, pady=(6, 0))
 Button(btn_frame, text="Clear",   command=clear_fields).grid(row=0, column=0, padx=10)
