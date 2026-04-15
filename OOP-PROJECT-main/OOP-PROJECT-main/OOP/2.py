@@ -17,13 +17,13 @@ def compute_total():
                 error.append("Please select a shipping option.")
             elif shipping_fee == 5.95 and order_total >= 75:
                 shipping_fee = 0.0
-
+            if error:
+                raise ValueError("\n".join(error))
             total = 1.12 * (order_total + shipping_fee)
 
             result_entry.delete(0, END)
             result_entry.insert(0, f"{total:.2f}")
-            if errors:
-                raise ValueError("\n".join(errors))
+            
         else:
             raise ValueError("Order amount cannot have empty.")
     except ValueError as e:
