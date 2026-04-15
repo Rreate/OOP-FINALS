@@ -48,21 +48,21 @@ root.resizable(False, False)
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 
-Label(root, text="Name:",           font=("Arial", 10)).grid(row=0, column=0, sticky="w",  padx=(30, 10), pady=(20, 8))
+Label(root, text="Name:",font=("Arial", 10)).grid(row=0, column=0, sticky="w",  padx=(30, 10), pady=(20, 8))
 name = Entry(root, width=15)
-name.grid(                                                row=0, column=1, sticky="w",  padx=(0,  30), pady=(20, 8))
+name.grid(row=0, column=1, sticky="w",  padx=(0,  30), pady=(20, 8))
 
-Label(root, text="Address:",        font=("Arial", 10)).grid(row=1, column=0, sticky="w",  padx=(30, 10), pady=8)
+Label(root, text="Address:",font=("Arial", 10)).grid(row=1, column=0, sticky="w",  padx=(30, 10), pady=8)
 address = Entry(root, width=15)
-address.grid(                                             row=1, column=1, sticky="w",  padx=(0,  30), pady=8)
+address.grid(row=1, column=1, sticky="w",  padx=(0,  30), pady=8)
 
 Label(root, text="Contact Number:", font=("Arial", 10)).grid(row=2, column=0, sticky="w",  padx=(30, 10), pady=8)
 contact = Entry(root, width=15)
-contact.grid(                                             row=2, column=1, sticky="w",  padx=(0,  30), pady=8)
+contact.grid(row=2, column=1, sticky="w",  padx=(0,  30), pady=8)
 
-Label(root, text="Email:",          font=("Arial", 10)).grid(row=3, column=0, sticky="w",  padx=(30, 10), pady=8)
+Label(root, text="Email:",font=("Arial", 10)).grid(row=3, column=0, sticky="w",  padx=(30, 10), pady=8)
 email = Entry(root, width=15)
-email.grid(                                               row=3, column=1, sticky="w",  padx=(0,  30), pady=8)
+email.grid(row=3, column=1, sticky="w",  padx=(0,  30), pady=8)
 
 Button(root, text="Submit", command=submit).grid(row=4, column=0, pady=(16, 20))
 Button(root, text="Clear",  command=clear).grid( row=4, column=1, pady=(16, 20))
