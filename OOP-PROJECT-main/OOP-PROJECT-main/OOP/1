@@ -4,6 +4,12 @@ from tkinter import messagebox
 def submit():
     errors = []
     try:
+        info = {
+            "Name":    name.get(),
+            "Address": address.get(),
+            "Contact": contact.get(),
+            "Email":   email.get(),
+        }
         if not name.get().strip():
             errors.append("Name cannot be empty.")
         if "@" not in email.get() and "." not in email.get():
@@ -16,12 +22,6 @@ def submit():
             errors.append("Please enter a valid address.")
         if errors:
             raise ValueError("\n".join(errors))
-        info = {
-            "Name":    name.get(),
-            "Address": address.get(),
-            "Contact": contact.get(),
-            "Email":   email.get(),
-        }
         for widget in root.winfo_children():
             if isinstance(widget, Toplevel) and getattr(widget, "_is_print_frame", False):
                 widget.destroy()
