@@ -40,14 +40,14 @@ def clear():
     contact.delete(0, END)
     email.delete(0, END)
 
+#GUI INITIALIZATION
 root = Tk()
 root.title("User Information")
 root.resizable(False, False)
-
-# Padding around the grid
+#SETTING ROOT COLUMN
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
-
+#SETTING UP INFOS FIELDS
 Label(root, text="Name:",font=("Arial", 10)).grid(row=0, column=0, sticky="w",  padx=(30, 10), pady=(20, 8))
 name = Entry(root, width=15)
 name.grid(row=0, column=1, sticky="w",  padx=(0,  30), pady=(20, 8))
@@ -64,6 +64,7 @@ Label(root, text="Email:",font=("Arial", 10)).grid(row=3, column=0, sticky="w", 
 email = Entry(root, width=15)
 email.grid(row=3, column=1, sticky="w",  padx=(0,  30), pady=8)
 
+#SETTING UP BUTTON
 Button(root, text="Submit", command=submit).grid(row=4, column=0, pady=(16, 20))
 Button(root, text="Clear",  command=clear).grid( row=4, column=1, pady=(16, 20))
 
