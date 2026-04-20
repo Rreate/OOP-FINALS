@@ -6,26 +6,25 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def compute_total():
     try:
-        if order_entry.get():
-            error=[]
-            order_total = float(order_entry.get())
-            shipping_fee = shipping_var.get()
-
-            if order_total < 0:
-                error.append("Order amount cannot be negative.")
-            if shipping_fee == 0.0:
-                error.append("Please select a shipping option.")
-            elif shipping_fee == 5.95 and order_total >= 75:
-                shipping_fee = 0.0
-            if error:
-                raise ValueError("\n".join(error))
-            total = 1.12 * (order_total + shipping_fee)
-
-            result_entry.delete(0, END)
-            result_entry.insert(0, f"{total:.2f}")
-            
-        else:
+        if not order_entry.get():
             raise ValueError("Order amount cannot have empty.")
+        error=[]
+        order_total = float(order_entry.get())
+        shipping_fee = shipping_var.get()
+
+        if order_total < 0:
+            error.append("Order amount cannot be negative.")
+        if shipping_fee == 0.0:
+            error.append("Please select a shipping option.")
+        elif shipping_fee == 5.95 and order_total >= 75:
+            shipping_fee = 0.0
+        if error:
+            raise ValueError("\n".join(error))
+        total = 1.12 * (order_total + shipping_fee)
+
+        result_entry.delete(0, END)
+        result_entry.insert(0, f"{total:.2f}")
+        
     except ValueError as e:
         messagebox.showerror("Error", str(e))
 
