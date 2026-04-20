@@ -62,9 +62,16 @@ tk.Label(left, text="Name", bg=TEAL, fg=WHITE,
          font=("Arial", 11), anchor="w", width=10).grid(
     row=0, column=0, sticky="w", pady=5)
 name_var = tk.StringVar()
+
+def validate_name(new_value):
+    return all(c.isalpha() or c == " " for c in new_value) or new_value == ""
+
+vcmd = left.register(validate_name)
 name_entry = tk.Entry(left, textvariable=name_var, width=20,
                       font=("Arial", 11), bg=WHITE, fg=BLACK,
-                      relief="sunken", bd=2)
+                      relief="sunken", bd=2,
+                      validate="key",
+                      validatecommand=(vcmd, "%P"))
 name_entry.grid(row=0, column=1, sticky="w", pady=5)
 
 # Position
@@ -185,7 +192,7 @@ def compute():
     ot_raw = ot_var.get().strip()
     try:
         ot_hours = float(ot_raw)
-        if ot_hours < 0:
+        if ot_hours < 0 or ot_hours > 8:
             raise ValueError
         ot_entry.config(bg=WHITE)
     except ValueError:
@@ -195,7 +202,7 @@ def compute():
                 "OT Hours must be a valid number (e.g. 0, 5, 5.5).")
         else:
             messagebox.showwarning("Input Error",
-                "OT Hours cannot be negative.")
+                "OT Hours cannot be negative or greater than 8.")
         return
 
     # Calculate
@@ -237,6 +244,11 @@ def print_slip():
     if not computed or not computed.get("name"):
         messagebox.showwarning("No Data", "Please compute first.")
         return
+
+    # Prevent multiple windows from opening on rapid clicks
+    for w in root.winfo_children():
+        if isinstance(w, tk.Toplevel):
+            return
 
     win = tk.Toplevel(root)
     win.title("Employee Payslip")
