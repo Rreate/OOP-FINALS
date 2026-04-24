@@ -253,7 +253,6 @@ def print_slip():
     win = tk.Toplevel(root)
     win.title("Employee Payslip")
     win.configure(bg=WHITE)
-    win.resizable(False, False)
 
     f = tk.Frame(win, bg=WHITE, padx=30, pady=20)
     f.pack()
@@ -279,9 +278,8 @@ def print_slip():
                  font=("Arial", 11, "bold"), anchor="w", width=20).grid(
             row=i+1, column=0, sticky="w", pady=3)
         tk.Label(f, text=value, bg=WHITE, fg=color,
-                 font=("Arial", 11), anchor="e", width=14).grid(
+                 font=("Arial", 11), anchor="e", width=25).grid(
             row=i+1, column=1, sticky="e", pady=3)
-
     tk.Frame(f, bg="#cccccc", height=1).grid(
         row=len(rows)+1, column=0, columnspan=2,
         sticky="ew", pady=(8, 0))
