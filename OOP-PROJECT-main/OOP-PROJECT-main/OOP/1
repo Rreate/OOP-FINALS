@@ -5,8 +5,8 @@ def submit():
     errors = []
     try:
         info = {
-            "Name":    name.get(),
-            "Address": address.get(),
+            "Name":    name.get().title(),
+            "Address": address.get().title(),
             "Contact": contact.get(),
             "Email":   email.get(),
         }
@@ -16,7 +16,7 @@ def submit():
             errors.append("Invalid email address.")
         if not contact.get().isdigit():
             errors.append("Contact number must contain digits only.")
-        elif len(contact.get()) < 11:
+        elif len(contact.get()) <= 11:
             errors.append("Contact number must be at least 11 digits.")
         if len(address.get().strip()) < 5:
             errors.append("Please enter a valid address.")
@@ -28,9 +28,9 @@ def submit():
         window = Toplevel(root)
         window._is_print_frame = True
         window.title("Summary")
-        window.geometry("250x130")
+        window.geometry("350x120")
         for key, value in info.items():
-            Label(window, text=f"{key}: {value}", font=("Arial", 10)).pack()
+            Label(window, text=f"{key}: {value}", font=("Arial", 10), width=40).pack(padx=20)
     except ValueError as e:
         messagebox.showerror("ERROR", str(e))
 
