@@ -21,9 +21,10 @@ def compute_total():
         if error:
             raise ValueError("\n".join(error))
         total = 1.12 * (order_total + shipping_fee)
-
+        
+        global result
         result_entry.delete(0, END)
-        result_entry.insert(0, f"{total:.2f}")
+        result.set(f"{total:.2f}")
         
     except ValueError as e:
         messagebox.showerror("Error", str(e))
@@ -36,7 +37,8 @@ def clear_fields():
 
 
 root = Tk()
-root.geometry("1000x500")
+root.geometry("750x500")
+root.title("CANDLELINE CORP. INC.")
 root.resizable(False, False)
 
 # --- Images ---
@@ -66,7 +68,7 @@ Label(root, image=img_py, bg="#f0f0e6").grid(row=0, column=2, sticky="ne", padx=
 
 # ---Main Frame ---
 panel = Frame(root, bg="#f0f0e6", bd=1, relief="solid", padx=20, pady=14)
-panel.grid(row=0, column=1, sticky="n", pady=50)
+panel.grid(row=0, column=0,columnspan=4, sticky="n", pady=90)
 
 
 panel.columnconfigure(0, weight=1)
@@ -113,7 +115,7 @@ Radiobutton(panel, bg="#f0f0e6",
             ).grid(row=5, column=1, sticky="w", padx=10)
 
 Radiobutton(panel, bg="#f0f0e6",
-            text="Standard (5 to 7 working days) @$5.95\n($0.00 if order amt > $75.00)",
+            text="Standard (5 to 7 working days) @$5.95\n($0.00 if order amt > 75)",
             value=5.95, variable=shipping_var,
             wraplength=210, justify=LEFT,
             font=("Times New Roman", 10), anchor="w"
@@ -128,7 +130,8 @@ Label(panel, text="Amounts Payable (12% VAT included):",
       ).grid(row=8, column=0, sticky="e", padx=(0, 6), pady=6)
 
 # --- Result ---
-result_entry = Entry(panel, width=20, font=("Times New Roman", 10), bg="#DBDBD0")
+result=StringVar()
+result_entry = Entry(panel, text=result, width=20, font=("Times New Roman", 10), bg="#DBDBD0",state=DISABLED)
 result_entry.grid(row=8, column=1, sticky="w", pady=6)
 
 # --- Buttons ---
@@ -136,5 +139,6 @@ btn_frame = Frame(panel, bg="#f0f0e6")
 btn_frame.grid(row=9, column=0, columnspan=2, pady=(6, 0))
 Button(btn_frame, text="Clear",   command=clear_fields).grid(row=0, column=0, padx=10)
 Button(btn_frame, text="Compute", command=compute_total).grid(row=0, column=1, padx=10)
+
 
 root.mainloop()
