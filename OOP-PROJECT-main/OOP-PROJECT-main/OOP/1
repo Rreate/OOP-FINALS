@@ -16,7 +16,7 @@ def submit():
             errors.append("Invalid email address.")
         if not contact.get().isdigit():
             errors.append("Contact number must contain digits only.")
-        elif len(contact.get()) <= 11:
+        elif len(contact.get()) < 11:
             errors.append("Contact number must be at least 11 digits.")
         if len(address.get().strip()) < 5:
             errors.append("Please enter a valid address.")
@@ -30,7 +30,7 @@ def submit():
         window.title("Summary")
         window.geometry("350x120")
         for key, value in info.items():
-            Label(window, text=f"{key}: {value}", font=("Arial", 10), width=40).pack(padx=20)
+            Label(window, text=f"{key}: {value}", font=("Arial", 10), width=len(info["Name"])+25).pack()
     except ValueError as e:
         messagebox.showerror("ERROR", str(e))
 
@@ -49,19 +49,19 @@ root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 #SETTING UP INFOS FIELDS
 Label(root, text="Name:",font=("Arial", 10)).grid(row=0, column=0, sticky="w",  padx=(30, 10), pady=(20, 8))
-name = Entry(root, width=15)
+name = Entry(root, width=30)
 name.grid(row=0, column=1, sticky="w",  padx=(0,  30), pady=(20, 8))
 
 Label(root, text="Address:",font=("Arial", 10)).grid(row=1, column=0, sticky="w",  padx=(30, 10), pady=8)
-address = Entry(root, width=15)
+address = Entry(root, width=30)
 address.grid(row=1, column=1, sticky="w",  padx=(0,  30), pady=8)
 
 Label(root, text="Contact Number:", font=("Arial", 10)).grid(row=2, column=0, sticky="w",  padx=(30, 10), pady=8)
-contact = Entry(root, width=15)
+contact = Entry(root, width=30)
 contact.grid(row=2, column=1, sticky="w",  padx=(0,  30), pady=8)
 
 Label(root, text="Email:",font=("Arial", 10)).grid(row=3, column=0, sticky="w",  padx=(30, 10), pady=8)
-email = Entry(root, width=15)
+email = Entry(root, width=30)
 email.grid(row=3, column=1, sticky="w",  padx=(0,  30), pady=8)
 
 #SETTING UP BUTTON
