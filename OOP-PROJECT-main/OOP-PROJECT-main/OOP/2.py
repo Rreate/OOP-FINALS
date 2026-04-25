@@ -23,7 +23,7 @@ def compute_total():
         total = 1.12 * (order_total + shipping_fee)
         
         global result
-        result_entry.delete(0, END)
+        result.set(0)
         result.set(f"{total:.2f}")
         
     except ValueError as e:
@@ -32,7 +32,7 @@ def compute_total():
 
 def clear_fields():
     order_entry.delete(0, END)
-    result_entry.delete(0, END)
+    result.set(0)
     shipping_var.set(0.0)
 
 
