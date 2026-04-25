@@ -220,7 +220,7 @@ def compute():
     net_var.set(f"{net:,.2f}")
 
     computed = {
-        "name": name_val.title(), "position": pos, "grade": grade,
+        "name": name_val.upper(), "position": pos, "grade": grade,
         "ot_hours": ot_hours, "ot_pay": ot_pay, "basic": basic,
         "gross": gross, "wh_tax": wh_tax,
         "total_ded": total_ded, "net": net,
