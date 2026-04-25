@@ -220,7 +220,7 @@ def compute():
     net_var.set(f"{net:,.2f}")
 
     computed = {
-        "name": name_val.upper(), "position": pos, "grade": grade,
+        "name": name_val.title(), "position": pos, "grade": grade,
         "ot_hours": ot_hours, "ot_pay": ot_pay, "basic": basic,
         "gross": gross, "wh_tax": wh_tax,
         "total_ded": total_ded, "net": net,
@@ -278,7 +278,7 @@ def print_slip():
                  font=("Arial", 11, "bold"), anchor="w", width=20).grid(
             row=i+1, column=0, sticky="w", pady=3)
         tk.Label(f, text=value, bg=WHITE, fg=color,
-                 font=("Arial", 11), anchor="e", width=25).grid(
+                 font=("Arial", 11), anchor="e", width=len(computed["name"])+25).grid(
             row=i+1, column=1, sticky="e", pady=3)
     tk.Frame(f, bg="#cccccc", height=1).grid(
         row=len(rows)+1, column=0, columnspan=2,
